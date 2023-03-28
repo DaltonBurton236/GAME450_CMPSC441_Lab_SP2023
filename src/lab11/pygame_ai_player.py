@@ -1,5 +1,5 @@
 """ Create PyGameAIPlayer class here"""
-
+from turn_combat import CombatPlayer
 
 class PyGameAIPlayer:
     pass
