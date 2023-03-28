@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     """ Add a line below that will reset the player variable to 
     a new object of PyGameAIPlayer class."""
-
+    #player = PyGameAIPlayer()
     state = State(
         current_city=start_city,
         destination_city=start_city,
