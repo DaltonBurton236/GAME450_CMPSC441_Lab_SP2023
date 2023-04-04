@@ -27,7 +27,7 @@ def run_episode(player, opponent):
         reward = run_turn(currentGame, player, opponent)
         result = ((player.health,opponent.health),player.weapon,reward)
         results.append(result)
-    print(results)
+    return results
 if __name__ == "__main__":
     player =PyGameAICombatPlayer("Legolas")
     opponent = PyGameComputerCombatPlayer("Computer")
