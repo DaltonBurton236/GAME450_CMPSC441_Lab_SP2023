@@ -80,8 +80,37 @@ def run_episodes(n_episodes):
         player = PyGameAICombatPlayer("Legolas")
         opponent = PyGameComputerCombatPlayer("Computer")
         history = run_episode(player,opponent)
-        for x in get_history_returns(history):
-            action_values.update(x.)
+        returns = get_history_returns(history)
+        for x in returns:
+            if x not in action_values:
+                action_values.update({x : [returns[x]]})
+            else:
+                action_values[x].append(returns[x])
+    for state in action_values:
+        total1 = 0
+        total2 = 0
+        total0 = 0
+        count1 = 0
+        count2 = 0
+        count0 = 0
+        for dictlist in action_values[state]:
+            if 1 in dictlist:
+                total1 += float(dictlist[1])
+                count1 += 1
+            if 2 in dictlist:
+                total2 += float(dictlist[2])
+                count2 += 1
+            if 0 in dictlist:
+                total0 += float(dictlist[0])
+                count0 += 1
+        if count1 == 0:
+            count1 =1
+        if count2 == 0:
+            count2 =1
+        if count0 == 0:
+            count0 = 1
+        action_values.update({state:{2:total2/count2, 1:total1/count1, 0:total0/count0}})
+
     return action_values
 
 
@@ -106,8 +135,8 @@ def test_policy(policy):
 
 
 if __name__ == "__main__":
-    action_values = run_episodes(50)
-    #print(action_values)
-    #optimal_policy = get_optimal_policy(action_values)
-    #print(optimal_policy)
-    #print(test_policy(optimal_policy))
+    action_values = run_episodes(100)
+    print(action_values)
+    optimal_policy = get_optimal_policy(action_values)
+    print(optimal_policy)
+    print(test_policy(optimal_policy))
