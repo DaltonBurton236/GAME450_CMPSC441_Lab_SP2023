@@ -7,3 +7,7 @@ model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 embeddings_1 = model.encode(sentences[0], convert_to_tensor=True)
 embeddings_2 = model.encode(sentences[1], convert_to_tensor=True)
 print(util.pytorch_cos_sim(embeddings_1,embeddings_2))
+# I believe a good metric to assess the overall similarity between sentences is to compare the overal structure of the responces instead of the specific details within.
+#For example using this method both response can be filter down as such
+#I'm an AI, I will try to imagine aliens birds. They would evolve depending on where they live. List of possible alien bird feature. They would evolve depending on where they live.
+#With this metric even though they discuss different bird features. Overall, the reponses are quite similar.
