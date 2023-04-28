@@ -1,5 +1,6 @@
 """ Create PyGameAIPlayer class here"""
 import sys
+import pygame
 from pathlib import Path
 sys.path.append(str((Path(__file__) / ".." / "..").resolve().absolute()))
 from lab11.turn_combat import CombatPlayer
@@ -9,7 +10,34 @@ class PyGameAIPlayer:
         pass
 
     def selectAction(self, state):
-        return random.randint(0,9)  # Not a safe operation for >10 cities
+        choice = random.randint(0,9)  # Not a safe operation for >10 cities
+        if choice == 0:
+            return pygame.K_0
+        elif choice == 1:
+            return pygame.K_1
+        elif choice == 2:
+            return pygame.K_2
+        elif choice == 3:
+                    return pygame.K_3
+
+        elif choice == 4:
+                    return pygame.K_4
+
+        elif choice == 5:
+                    return pygame.K_5
+
+        elif choice == 6:
+                    return pygame.K_6
+
+        elif choice == 7:
+                    return pygame.K_7
+
+        elif choice == 8:
+                    return pygame.K_8
+
+        elif choice == 9:
+                    return pygame.K_9
+
 
 def random_weapon_select():
     return random.randint(0, 2)

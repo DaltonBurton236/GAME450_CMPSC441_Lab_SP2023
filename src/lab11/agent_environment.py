@@ -6,6 +6,7 @@ from pygame_combat import run_pygame_combat
 from pygame_human_player import PyGameHumanPlayer
 from landscape import get_landscape, get_combat_bg
 from pygame_ai_player import PyGameAIPlayer
+from lab7.ga_cities import game_fitness, get_elevation, setup_GA, run_lab_7
 
 from pathlib import Path
 
@@ -73,7 +74,9 @@ if __name__ == "__main__":
 
     screen = setup_window(width, height, "Game World Gen Practice")
 
+    #landscape
     landscape_surface = get_landscape_surface(size)
+
     combat_surface = get_combat_surface(size)
     city_names = [
         "Morkomasto",
@@ -87,8 +90,11 @@ if __name__ == "__main__":
         "Baernlad",
         "Forthyr",
     ]
-
+    elevation = []
+    """ initialize elevation here from your previous code"""
+    elevation = get_elevation(size)
     cities = get_randomly_spread_cities(size, len(city_names))
+    cities = run_lab_7(size, len(cities))
     routes = get_routes(cities)
 
     random.shuffle(routes)
@@ -100,7 +106,7 @@ if __name__ == "__main__":
 
     """ Add a line below that will reset the player variable to 
     a new object of PyGameAIPlayer class."""
-    player = PyGameAIPlayer()
+    #player = PyGameAIPlayer()
     state = State(
         current_city=start_city,
         destination_city=start_city,

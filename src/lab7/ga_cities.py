@@ -44,6 +44,15 @@ def game_fitness(cities, idx, elevation, size):
         for othercity in citieslist:
             if othercity[0] == CurSolution[0] & othercity[1] == CurSolution[1]:
                 fitness -= 1
+            x_dist = abs(othercity[0] - CurSolution[0])
+            y_dist = abs(othercity[1] - CurSolution[1])
+            dist = x_dist + y_dist
+            if (dist > 50 ):
+                fitness+=2
+            elif dist < 15:
+                fitness -= 2
+            else:
+                fitness += 0
     return fitness
 
 
@@ -121,6 +130,36 @@ def show_cities(cities, landscape_pic, cmap="gist_earth"):
     plt.plot(cities[:, 1], cities[:, 0], "r.")
     plt.show()
 
+def run_lab_7(size, n_cities):
+    elevation = get_elevation(size)
+    # normalize landscape
+    elevation = np.array(elevation)
+    elevation = (elevation - elevation.min()) / (elevation.max() - elevation.min())
+    landscape_pic = elevation_to_rgba(elevation)
+
+    # setup fitness function and GA
+    fitness = lambda cities, idx: game_fitness(
+        cities, idx, elevation=elevation, size=size
+    )
+    fitness_function, ga_instance = setup_GA(fitness, n_cities, size)
+    # Show one of the initial solutions.
+    cities = ga_instance.initial_population[0]
+    cities = solution_to_cities(cities, size)
+    #show_cities(cities, landscape_pic)
+
+    # Run the GA to optimize the parameters of the function.
+    ga_instance.run()
+    ga_instance.plot_fitness()
+    print("Final Population")
+
+    # Show the best solution after the GA finishes running.
+    cities = ga_instance.best_solution()[0]
+    cities_t = solution_to_cities(cities, size)
+    #plt.imshow(landscape_pic, cmap="gist_earth")
+    #plt.plot(cities_t[:, 1], cities_t[:, 0], "r.")
+    #plt.show()
+    print(fitness_function(cities, 0))
+    return cities_t
 
 if __name__ == "__main__":
     print("Initial Population")
