@@ -1,4 +1,5 @@
 import sys
+sys.setrecursionlimit(10**6)
 import pygame
 import random
 from sprite import Sprite
@@ -9,6 +10,16 @@ from pygame_ai_player import PyGameAIPlayer
 from lab7.ga_cities import game_fitness, get_elevation, setup_GA, run_lab_7
 
 from pathlib import Path
+import os
+print(os.getcwd())
+
+import openai
+import json
+
+# Load the OpenAI API key from a JSON file
+with open("openai-api-key.json", "r") as f:
+    secrets = json.load(f)
+    openai.api_key = secrets["SleepyKey"]
 
 sys.path.append(str((Path(__file__) / ".." / "..").resolve().absolute()))
 
@@ -44,6 +55,26 @@ def displayCityNames(city_locations, city_names):
     for i, name in enumerate(city_names):
         text_surface = game_font.render(str(i) + " " + name, True, (0, 0, 150))
         screen.blit(text_surface, city_locations[i])
+
+def generate_journal_entry():
+    # Define the prompt for generating the journal entry
+    prompt = "Pretend to be a man on an adventure and write a short Journal entry from his perspective during his trip"
+    
+    # Generate the journal entry using the OpenAI API
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=200,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    
+    # Extract the generated text from the API response
+    entry = response.choices[0].text.strip()
+    
+    # Return the generated journal entry
+    return entry
 
 
 class State:
@@ -94,7 +125,7 @@ if __name__ == "__main__":
     """ initialize elevation here from your previous code"""
     elevation = get_elevation(size)
     cities = get_randomly_spread_cities(size, len(city_names))
-    cities = run_lab_7(size, len(cities))
+    #cities = run_lab_7(size, len(cities))
     routes = get_routes(cities)
 
     random.shuffle(routes)
@@ -125,6 +156,7 @@ if __name__ == "__main__":
                 destination = cities[state.destination_city]
                 player_sprite.set_location(cities[state.current_city])
                 state.travelling = True
+                
                 print(
                     "Travelling from", state.current_city, "to", state.destination_city
                 )
@@ -144,7 +176,9 @@ if __name__ == "__main__":
             state.encounter_event = random.randint(0, 1000) < 2
             if not state.travelling:
                 print('Arrived at', state.destination_city)
-
+                Journal = generate_journal_entry()
+                print(Journal)
+        
         if not state.travelling:
             encounter_event = False
             state.current_city = state.destination_city
